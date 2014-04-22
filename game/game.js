@@ -10,7 +10,7 @@ var actionFns = require('./actionFns');
 var defaultRules = require('./defaultRules');
 var gameLookup = require('./gameLookup');
 var initAccounts = require('./initAccounts');
-var Loadup = require('./loadup');
+var Loadup = require('./Loadup');
 var TurnTicker = require('./turnTicker');
 var Effects = require('./effects/Effects');
 var FutureManager = require('./futures/FutureManager');
@@ -288,7 +288,7 @@ module.exports = function(accounts, rules, gameId) {
     self.remove = function() {
         self.state = 'removed';
         accounts = null;
-        self.board.remove();
+        self.board.clear();
         self.turnTicker.stop();
         self.eventEmitter.removeAllListeners();
         gameLookup.deleteId(gameId);

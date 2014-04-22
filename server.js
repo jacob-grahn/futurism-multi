@@ -1,9 +1,15 @@
 'use strict';
 
+//--- last ditch error handler
+/*process.on('uncaughtException', function (err) {
+    console.log('unhandled error', err, err.stack);
+});*/
+
+
 //--- initialize
 var port = process.env.PORT || 9100;
 console.log('NODE_ENV: ', process.env.NODE_ENV);
-console.log('futurism-multi listening on port ' + port);
+console.log(process.env.APP_NAME + 'listening on port ' + port);
 var io = require('socket.io').listen(port);
 
 

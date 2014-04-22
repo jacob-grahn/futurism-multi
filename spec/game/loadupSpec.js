@@ -67,7 +67,6 @@ describe('loadup', function() {
         it('should set the cards pride cost', function() {
             var card = {faction: 'en', abilities: ['assn', 'tree'], attack: 1, health: 1};
             var gameCard = loadup.prepareCard(card);
-            console.log('gameCard', gameCard);
             expect(gameCard.pride).toBe(3);
         });
 

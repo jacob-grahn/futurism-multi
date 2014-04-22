@@ -28,6 +28,7 @@
          * @returns {null}
          */
         self.selectDeck = function(player, deckId, callback) {
+
             DeckGoose
                 .findById(deckId)
                 .populate('cards')
