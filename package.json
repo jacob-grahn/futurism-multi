@@ -3,7 +3,7 @@
   "description": "socket.io server for Futurism, a multiplayer card game",
   "version": "0.0.5",
   "private": false,
-  "main": "server/server.js",
+  "main": "server.js",
   "scripts": {
     "start": "grunt serve",
     "test": "jasmine-node spec --autotest --color --watch *.js config fns game shared"
