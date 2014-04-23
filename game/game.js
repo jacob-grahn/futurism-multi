@@ -3,7 +3,6 @@
 var _ = require('lodash');
 var events = require('events');
 var DiffTracker = require('../fns/diffTracker');
-var factions = require('../shared/factions');
 var Board = require('../shared/Board');
 var broadcast = require('../broadcast');
 var actionFns = require('./actionFns');
@@ -114,9 +113,9 @@ module.exports = function(accounts, rules, gameId) {
         self.turnTicker.stop();
         self.eventEmitter.emit(self.END, self);
         self.emit('gameOver', {winners: _.map(winners, function(winner) {
-            return winner._id;}
-        )});
-        _.delay(self.remove, 2000);
+            return winner._id;
+        })});
+        _.delay(self.remove, 1000);
     };
 
 

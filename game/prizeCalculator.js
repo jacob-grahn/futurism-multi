@@ -5,7 +5,6 @@
     var async = require('async');
     var Elo = require('../fns/elo');
     var UserGoose = require('../shared/models/Stats');
-    var Player = require('./Player');
 
 
     /**
@@ -113,7 +112,7 @@
     /**
      * Calculate new elo ratings for all players from this game
      * @param {array.<Player>} players
-     * @param {number} winningTeam
+     * @param {String} winningTeam
      */
     var calcNewElo = function(players, winningTeam) {
         var wElo = [];
@@ -176,7 +175,7 @@
             _.each(players, function(player) {
                 if(player.team === winningTeam) {
                     player.fractures++;
-                };
+                }
             });
         }
     };
@@ -195,7 +194,7 @@
          * Calculate elo changes and prizes
          * Save updated data to mongo
          * @param {array.<Player>} players
-         * @param {number} winningTeam
+         * @param {String} winningTeam
          * @param {bool} prize
          * @param {function} callback
          */
@@ -222,6 +221,6 @@
             });
         }
 
-    }
+    };
 
 }());

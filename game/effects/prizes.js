@@ -1,6 +1,5 @@
 'use strict';
 
-var _ = require('lodash');
 var prizeCalculator = require('../prizeCalculator');
 
 
@@ -21,7 +20,11 @@ var self = {
      * award prizes
      */
     prizes: function(game) {
-        prizeCalculator.run(game.players, game.winners, false, function(err) {
+        var winningTeam = '';
+        if(game.winners.length > 0) {
+            winningTeam = game.winners[0].team;
+        }
+        prizeCalculator.run(game.players, winningTeam, false, function(err) {
             if(err) {
                 game.emit('error', err);
             }
