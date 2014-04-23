@@ -1,11 +1,5 @@
 'use strict';
 
-//--- last ditch error handler
-/*process.on('uncaughtException', function (err) {
-    console.log('unhandled error', err, err.stack);
-});*/
-
-
 //--- initialize
 var port = process.env.PORT || 9100;
 console.log('NODE_ENV: ', process.env.NODE_ENV);
@@ -15,14 +9,11 @@ var io = require('socket.io').listen(port);
 
 //--- mongoose connect
 var mongoose = require('mongoose');
-require('./fns/mongoose/findByIdAndSave').attach(mongoose);
-require('./fns/mongoose/findOneAndSave').attach(mongoose);
-require('./fns/mongoose/validatedUpdate').attach(mongoose);
 mongoose.connect(process.env.MONGO_URI);
 
 
 //--- redis connect
-var redisSession = require('./fns/redisSession');
+var redisSession = require('./shared/redisSession');
 redisSession.connect(process.env.REDIS_URI);
 
 

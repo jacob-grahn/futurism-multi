@@ -1,7 +1,7 @@
 (function() {
     'use strict';
 
-    var RecordGoose = require('../models/record');
+    var RecordGoose = require('../shared/models/Record');
     var _ = require('lodash');
 
 

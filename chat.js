@@ -3,7 +3,7 @@
 var _ = require('lodash');
 var broadcast = require('./broadcast');
 var sanitize = require('validator').sanitize;
-var gamehub = require('./fns/globe');
+var gamehub = require('./shared/globe');
 
 
 

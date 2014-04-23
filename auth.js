@@ -1,6 +1,6 @@
 'use strict';
 
-var session = require('./fns/redisSession');
+var session = require('./shared/redisSession');
 
 module.exports = {
 

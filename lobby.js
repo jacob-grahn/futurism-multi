@@ -3,7 +3,7 @@
 var Game = require('./game/game');
 var broadcast = require('./broadcast');
 var Lookup = require('./fns/lookup');
-var createRandomString = require('./fns/createRandomString');
+var randomString = require('randomstring');
 var _ = require('lodash');
 var defaultRules = require('./game/defaultRules');
 
@@ -128,7 +128,7 @@ Lobby.createRoom = function(lobbyId) {
      * @param {object} matchup
      */
     var startMatchup = function(matchup) {
-        var gameId = 'open:game:' + createRandomString(12);
+        var gameId = 'open:game:' + randomString.generate(12);
         new Game(matchup.accounts, matchup.rules, gameId);
         broadcast(lobbyId, 'startMatchup', {id: matchup.id, gameId: gameId});
         lobby.matchups.deleteId(matchup.id);

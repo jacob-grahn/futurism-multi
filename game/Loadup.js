@@ -2,7 +2,7 @@
     'use strict';
 
     var _ = require('lodash');
-    var DeckGoose = require('../models/deck');
+    var DeckGoose = require('../shared/models/Deck');
     var deckFns = require('../shared/deckFns');
     var cardFns = require('../shared/cardFns');
     var factions = require('../shared/factions');

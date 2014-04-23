@@ -1,8 +1,8 @@
 'use strict';
 
 var _ = require('lodash');
-var redisSession = require('./fns/redisSession');
-var redisClient = require('./fns/redisConnect')();
+var redisSession = require('./shared/redisSession');
+var redisClient = require('./shared/redisConnect')();
 
 var io;
 
