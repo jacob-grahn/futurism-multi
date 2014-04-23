@@ -1,4 +1,6 @@
-var deBuf = require('../../../../../server/multi/game/effects/deBuf');
+'use strict';
+
+var deBuf = require('../../../game/effects/deBuf');
 var sinon = require('sinon');
 
 describe('effects/deBuf', function() {

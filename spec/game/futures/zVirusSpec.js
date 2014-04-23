@@ -1,5 +1,7 @@
-var zVirus = require('../../../../../server/multi/game/futures/zVirus');
-var Board = require('../../../../../shared/Board');
+'use strict';
+
+var zVirus = require('../../../game/futures/zVirus');
+var Board = require('../../../shared/Board');
 var sinon = require('sinon');
 
 describe('futures/zVirus', function() {
@@ -78,8 +80,8 @@ describe('futures/zVirus', function() {
             {playerId: 2, column: 1, row: 0, cid: 5}
         ]};
         zVirus.reanimateDead(game, 'death', null, data);
-        expect(player1.graveyard).toEqual([{cid: 3, name: 'aaaaarrrgg', faction: 'aa'}])
-        expect(player2.graveyard).toEqual([{cid: 4, name: 'peter', faction: 'ze'}])
+        expect(player1.graveyard).toEqual([{cid: 3, name: 'aaaaarrrgg', faction: 'aa'}]);
+        expect(player2.graveyard).toEqual([{cid: 4, name: 'peter', faction: 'ze'}]);
     });
 
 

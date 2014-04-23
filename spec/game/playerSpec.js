@@ -1,6 +1,8 @@
+'use strict';
+
 describe('game/player', function() {
 
-    var Player = require('../../../multi/game/Player');
+    var Player = require('../../game/Player');
 
     it('should set up some defaults', function() {
         var account = {

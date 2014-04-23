@@ -1,7 +1,9 @@
+'use strict';
+
 describe('lobby', function() {
 
-    var broadcast = require('../../multi/broadcast');
-    var Lobby = require('../../multi/lobby');
+    var broadcast = require('../broadcast');
+    var Lobby = require('../lobby');
 
     var lobby;
 
@@ -39,7 +41,11 @@ describe('lobby', function() {
     it('should not let the same user exist in two matchups', function() {
         var user = {_id:15};
         var matchup1 = lobby.createMatchup(user, {maxPride:20});
+        expect(matchup1.accounts.length).toBe(1);
+        
         var matchup2 = lobby.createMatchup(user, {maxPride:25});
+        expect(matchup1.accounts.length).toBe(0);
+        expect(matchup2.accounts.length).toBe(1);
         expect(lobby.matchups.toArray().length).toBe(1);
         expect(lobby.matchups.toArray()[0].rules.maxPride).toBe(25);
 

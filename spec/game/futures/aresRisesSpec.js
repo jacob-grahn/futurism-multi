@@ -1,5 +1,7 @@
-var aresRises = require('../../../../../server/multi/game/futures/aresRises');
-var factions = require('../../../../../shared/factions');
+'use strict';
+
+var aresRises = require('../../../game/futures/aresRises');
+var factions = require('../../../shared/factions');
 var sinon = require('sinon');
 
 describe('futures/aresRises', function() {

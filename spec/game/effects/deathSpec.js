@@ -1,4 +1,6 @@
-var death = require('../../../../../server/multi/game/effects/death');
+'use strict';
+
+var death = require('../../../game/effects/death');
 var sinon = require('sinon');
 
 describe('effects/death', function() {

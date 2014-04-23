@@ -1,12 +1,14 @@
+'use strict';
+
 describe('game/prizeCalculator', function() {
 
     var mongoose = require('mongoose');
     var mockgoose = require('mockgoose');
     mockgoose(mongoose);
 
-    var UserGoose = require('../../../models/stats');
-    var PrizeCalculator = require('../../../multi/game/prizeCalculator');
-    var Elo = require('../../../fns/elo');
+    var UserGoose = require('../../shared/models/Stats');
+    var PrizeCalculator = require('../../game/prizeCalculator');
+    var Elo = require('../../fns/elo');
 
 
     var uid1, uid2, uid3;
@@ -118,7 +120,7 @@ describe('game/prizeCalculator', function() {
         var players = [{_id:uid3, team:1}, {_id:uid1, team:2}];
         var winningTeam = 1;
         var prize = true;
-        PrizeCalculator.run(players, winningTeam, prize, function(err, users) {
+        PrizeCalculator.run(players, winningTeam, prize, function(err) {
             expect(err).toBeFalsy();
             expect(players[0].elo).toBe(eloResult.a);
             expect(players[1].elo).toBe(eloResult.b);
@@ -139,7 +141,7 @@ describe('game/prizeCalculator', function() {
         var players = [{_id:uid2, team:1}, {_id:uid1, team:2}];
         var winningTeam = 1;
         var prize = true;
-        PrizeCalculator.run(players, winningTeam, prize, function(err, users) {
+        PrizeCalculator.run(players, winningTeam, prize, function(err) {
             expect(err).toBeFalsy();
             expect(players[0].fame).toBe(fameA);
             expect(players[1].fame).toBe(fameB);
@@ -167,7 +169,7 @@ describe('game/prizeCalculator', function() {
         var players = [{_id:uid3, team:1}, {_id:uid2, team:2}];
         var winningTeam = 1;
         var prize = true;
-        PrizeCalculator.run(players, winningTeam, prize, function(err, users) {
+        PrizeCalculator.run(players, winningTeam, prize, function(err) {
             expect(err).toBeFalsy();
             UserGoose.findById(uid3, function(err, doc) {
                 expect(err).toBeFalsy();

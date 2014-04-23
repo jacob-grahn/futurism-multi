@@ -1,4 +1,6 @@
-var refresh = require('../../../../../server/multi/game/effects/refresh');
+'use strict';
+
+var refresh = require('../../../game/effects/refresh');
 var sinon = require('sinon');
 
 

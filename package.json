@@ -5,8 +5,8 @@
   "private": false,
   "main": "server/server.js",
   "scripts": {
-    "start": "node server",
-    "test": "grunt test"
+    "start": "grunt serve",
+    "test": "jasmine-node spec --autotest --color --watch *.js config fns game shared"
   },
   "engines": {
     "node": "0.10.x"
@@ -25,6 +25,7 @@
   "devDependencies": {
     "sinon": "~1.9.1",
     "grunt-nodemon": "~0.2.1",
-    "jshint-stylish": "~0.1.5"
+    "jshint-stylish": "~0.1.5",
+    "mockgoose": "~1.8.1"
   }
 }

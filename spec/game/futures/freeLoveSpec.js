@@ -1,4 +1,6 @@
-var freeLove = require('../../../../../server/multi/game/futures/freeLove');
+'use strict';
+
+var freeLove = require('../../../game/futures/freeLove');
 var sinon = require('sinon');
 
 describe('futures/freeLove', function() {

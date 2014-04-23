@@ -1,8 +1,8 @@
 'use strict';
 
-var nuclearWar = require('../../../../../server/multi/game/futures/nuclearWar');
-var futures = require('../../../../../shared/futures');
-var actions = require('../../../../../shared/actions');
+var nuclearWar = require('../../../game/futures/nuclearWar');
+var futures = require('../../../shared/futures');
+var actions = require('../../../shared/actions');
 var sinon = require('sinon');
 var _ = require('lodash');
 

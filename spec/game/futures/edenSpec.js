@@ -1,5 +1,6 @@
-var abilities = require('../../../../../shared/actions');
-var eden= require('../../../../multi/game/futures/eden');
+'use strict';
+
+var eden = require('../../../game/futures/eden');
 var sinon = require('sinon');
 
 describe('futures/eden', function() {

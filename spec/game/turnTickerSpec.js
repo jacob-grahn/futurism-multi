@@ -1,6 +1,11 @@
+'use strict';
+
+var _ = require('lodash');
+
+
 describe('game/turnTicker', function() {
 
-    var TurnTicker = require('../../../multi/game/turnTicker');
+    var TurnTicker = require('../../game/turnTicker');
 
 
     it('should move to the next player when a turn is ended', function() {
@@ -40,11 +45,18 @@ describe('game/turnTicker', function() {
         var player1 = {_id:1};
         var player2 = {_id:2};
         var tt = new TurnTicker([player1, player2], 30000);
-        tt.start(function(elapsed, turnOwners) {
-            expect(tt.turn).toBe(0);
-            tt.stop();
-            done();
-        });
-        tt.endTurn();
+        tt.start(
+            function() {},
+            function(elapsed, turnOwners) {
+                expect(elapsed).toBeGreaterThan(1);
+                expect(tt.turn).toBe(1);
+                expect(turnOwners).toEqual([player1]);
+                tt.stop();
+                done();
+            }
+        );
+        _.delay(function() {
+            tt.endTurn();
+        }, 2);
     });
 });

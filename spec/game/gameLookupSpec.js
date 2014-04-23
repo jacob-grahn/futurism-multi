@@ -1,6 +1,8 @@
+'use strict';
+
 describe('gameLookup', function() {
 
-    var gameLookup = require('../../../multi/game/gameLookup');
+    var gameLookup = require('../../game/gameLookup');
 
 
     it('should store and retrieve games by id', function() {

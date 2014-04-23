@@ -1,8 +1,8 @@
 'use strict';
 
-var anarchy = require('../../../../../server/multi/game/futures/anarchy');
-var futures = require('../../../../../shared/futures');
-var actions = require('../../../../../shared/actions');
+var anarchy = require('../../../game/futures/anarchy');
+var futures = require('../../../shared/futures');
+var actions = require('../../../shared/actions');
 var sinon = require('sinon');
 
 

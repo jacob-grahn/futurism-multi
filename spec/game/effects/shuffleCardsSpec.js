@@ -1,4 +1,6 @@
-var shuffleCards = require('../../../../../server/multi/game/effects/shuffleCards');
+'use strict';
+
+var shuffleCards = require('../../../game/effects/shuffleCards');
 
 describe('effects/shuffleCards', function() {
 

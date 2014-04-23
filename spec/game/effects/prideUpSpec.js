@@ -1,4 +1,6 @@
-var prideUp = require('../../../../../server/multi/game/effects/prideUp');
+'use strict';
+
+var prideUp = require('../../../game/effects/prideUp');
 
 describe('effects/prideUp', function() {
 

@@ -1,4 +1,6 @@
-var lazyForfeit = require('../../../../../server/multi/game/effects/lazyForfeit');
+'use strict';
+
+var lazyForfeit = require('../../../game/effects/lazyForfeit');
 var sinon = require('sinon');
 
 describe('effects/lazyForfeit', function() {

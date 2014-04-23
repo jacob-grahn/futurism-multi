@@ -1,6 +1,7 @@
-var abilities = require('../../../../../shared/actions');
-var factions = require('../../../../../shared/factions');
-var assimilation = require('../../../../../server/multi/game/futures/assimilation');
+'use strict';
+
+var factions = require('../../../shared/factions');
+var assimilation = require('../../../game/futures/assimilation');
 var sinon = require('sinon');
 
 describe('futures/assimilation', function() {

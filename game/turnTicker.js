@@ -22,7 +22,7 @@
 
         timePerTurn = timePerTurn || 30000;
 
-        self.turn = 0;
+        self.turn = 1;
         self.turnOwners = [];
         self.startTime = 0;
 
@@ -67,7 +67,7 @@
             clearTimeout(intervalId);
             if(running) {
                 if(endCallback) {
-                    endCallback(self.getElapsed());
+                    endCallback(self.getElapsed(), self.turnOwners);
                 }
                 self.turn++;
                 nextTurn();
@@ -97,7 +97,7 @@
          * select players based on which turn it is
          */
         var getTurnOwners = function(turn) {
-            var index = turn % playerCount;
+            var index = (turn+1) % playerCount;
             var player = players[index];
             var owners = [player];
             return owners;
@@ -141,7 +141,7 @@
             intervalId = setTimeout(self.endTurn, turnExpireTime);
 
             if(beginCallback) {
-                beginCallback(self.startTime);
+                beginCallback(self.startTime, self.turnOwners);
             }
         };
     };

@@ -1,16 +1,17 @@
+'use strict';
+
 describe('game', function() {
-    'use strict';
 
     var mongoose = require('mongoose');
     var mockgoose = require('mockgoose');
     mockgoose(mongoose);
 
     var _ = require('lodash');
-    var Game = require('../../../multi/game/game');
-    var DeckGoose = require('../../../models/deck');
-    var CardGoose = require('../../../models/card');
-    var UserGoose = require('../../../models/stats');
-    var broadcast = require('../../../multi/broadcast');
+    var Game = require('../../game/game');
+    var DeckGoose = require('../../shared/models/Deck');
+    var CardGoose = require('../../shared/models/Card');
+    var UserGoose = require('../../shared/models/Stats');
+    var broadcast = require('../../broadcast');
 
 
     var uid1 = mongoose.Types.ObjectId();
@@ -96,7 +97,7 @@ describe('game', function() {
     });
 
 
-    /*it('should play through a simple game', function(done) {
+    it('should play through a simple game', function(done) {
         var accounts = [
             {_id:uid1, name:'phil'},
             {_id:uid2, name:'paulina'}
@@ -144,8 +145,8 @@ describe('game', function() {
                     }
                 ]);
 
-                if(actionResult !== 'ok') {
-                    return done(actionResult);
+                if(!actionResult.success) {
+                    return done(JSON.stringify(actionResult));
                 }
 
                 expect(game.board.target(uid1,0,0).card.name).toBe('phil');
@@ -173,14 +174,11 @@ describe('game', function() {
                             row: 0
                         }
                     ])
-                ).toBe('ok');
+                ).toEqual({success: true});
 
                 game.endTurn(player2);
 
                 expect(game.board.target(uid1,0,0).card.moves).toBe(1);
-                expect( game.doAction(player1, 'rlly', [{playerId:uid1, column:0, row:0}]) ).toBe('ok');
-                expect(game.board.target(uid1,0,0).card.moves).toBe(0);
-                expect(player1.pride).toBe(3);
                 game.endTurn(player1);
 
                 game.board.target(uid2,0,0).card.health = -4;
@@ -203,10 +201,10 @@ describe('game', function() {
                             expect(doc.fame > 30).toBe(true);
 
                             done();
-                        })
+                        });
                     });
-                });
-            })
-        })
-    });*/
+                }, 3000);
+            });
+        });
+    });
 });

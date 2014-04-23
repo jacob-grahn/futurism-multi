@@ -1,4 +1,6 @@
-var poison = require('../../../../../server/multi/game/effects/poison');
+'use strict';
+
+var poison = require('../../../game/effects/poison');
 var sinon = require('sinon');
 
 describe('effects/poison', function() {

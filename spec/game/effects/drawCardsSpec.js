@@ -1,4 +1,6 @@
-var drawCards = require('../../../../../server/multi/game/effects/drawCards');
+'use strict';
+
+var drawCards = require('../../../game/effects/drawCards');
 
 describe('effects/drawCards', function() {
 

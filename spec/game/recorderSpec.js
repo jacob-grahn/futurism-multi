@@ -1,11 +1,13 @@
+'use strict';
+
 describe('recorder', function() {
 
     var mongoose = require('mongoose');
     var mockgoose = require('mockgoose');
     mockgoose(mongoose);
 
-    var RecordGoose = require('../../../models/record');
-    var Recorder = require('../../../multi/game/Recorder');
+    var RecordGoose = require('../../shared/models/Record');
+    var Recorder = require('../../game/Recorder');
 
     var recorder, gameId;
 
@@ -152,7 +154,7 @@ describe('recorder', function() {
             recorder.turns = 83;
             recorder.actions = [{id: 'tree'}];
 
-            recorder.save(gameId, function(err, result) {
+            recorder.save(gameId, function(err) {
                 expect(err).toBe(null);
 
                 RecordGoose.findById(gameId, function(err, doc) {

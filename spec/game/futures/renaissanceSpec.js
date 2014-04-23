@@ -1,7 +1,7 @@
 'use strict';
 
-var renaissance = require('../../../../../server/multi/game/futures/renaissance');
-var futures = require('../../../../../shared/futures');
+var renaissance = require('../../../game/futures/renaissance');
+var futures = require('../../../shared/futures');
 var sinon = require('sinon');
 
 
