@@ -84,7 +84,7 @@ var actionFns = {
                 target = {
                     player: player,
                     card: card
-                }
+                };
             }
 
             // if the target is a position on the board

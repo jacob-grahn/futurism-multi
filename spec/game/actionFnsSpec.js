@@ -1,7 +1,9 @@
+'use strict';
+
 describe('actionFns', function() {
 
-    var actionFns = require('../../../multi/game/actionFns');
-    var Board = require('../../../../shared/Board');
+    var actionFns = require('../../game/actionFns');
+    var Board = require('../../shared/Board');
     var game, board, player1, player2;
 
 
@@ -23,7 +25,7 @@ describe('actionFns', function() {
 
         game = {
             board: board
-        }
+        };
     });
 
 
@@ -76,7 +78,7 @@ describe('actionFns', function() {
             abilities: ['feml'],
             moves: 1
         };
-        var result = actionFns.doAction(game, player1, 'male', [
+        actionFns.doAction(game, player1, 'male', [
             {playerId:1, column:0, row:0}, //male
             {playerId:1, column:0, row:1}, //female
             {playerId:1, column:1, row:0} //empty slot for child

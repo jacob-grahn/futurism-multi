@@ -1,6 +1,8 @@
+'use strict';
+
 describe('game/board', function() {
 
-    var Board = require('../../../../shared/Board');
+    var Board = require('../../shared/Board');
     var player1, player2, player3, columns, rows;
 
 

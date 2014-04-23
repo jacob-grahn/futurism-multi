@@ -1,7 +1,9 @@
+'use strict';
+
 describe('chat', function() {
 
-    var Chat = require('../../multi/chat');
-    var broadcast = require('../../multi/broadcast');
+    var Chat = require('../chat');
+    var broadcast = require('../broadcast');
 
 
     beforeEach(function() {
