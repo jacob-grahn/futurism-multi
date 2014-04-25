@@ -3,6 +3,7 @@
 module.exports = function (grunt) {
 
     grunt.loadNpmTasks('grunt-nodemon');
+    grunt.loadNpmTasks('grunt-shell');
     
     // Define the configuration for all the tasks
     grunt.initConfig({
@@ -32,39 +33,24 @@ module.exports = function (grunt) {
             },
             all: [
                 'gruntfile.js',
-                '<%= yeoman.app %>/scripts/**/*.js'
+                'config/*.js',
+                'fns/**/*.js',
+                'game/**/*.js',
+                '*.js'
             ],
             test: {
                 options: {
-                    jshintrc: 'test/.jshintrc'
+                    jshintrc: 'spec/.jshintrc'
                 },
-                src: ['test/spec/{,*/}*.js']
-            }
-        },
-
-
-        // Run the node server in server/testServer.js
-        develop: {
-            server: {
-                file: '<%= yeoman.server %>/testServer.js',
-                nodeArgs: []
+                src: ['spec/**/*.js']
             }
         },
 
 
         // shell commands
         shell: {
-            jasmine: {
-                command: 'jasmine-node server/spec --forceexit',
-                options: {
-                    stdout: true
-                }
-            },
-            jasmineWatch: {
-                command: 'jasmine-node server/spec --autotest --color --watch server/*.js server/fns server/middleware server/models server/multi server/routes shared',
-                options: {
-                    stdout: true
-                }
+            deploy: {
+                command: 'modulus deploy --project-name futurism-multi-staging'
             }
         }
 
@@ -72,9 +58,16 @@ module.exports = function (grunt) {
 
 
 
-    grunt.registerTask('serve', function (target) {
+    grunt.registerTask('serve', function () {
         grunt.task.run([
             'nodemon'
+        ]);
+    });
+    
+    
+    grunt.registerTask('deploy', function() {
+        grunt.task.run([
+            'shell:deploy'
         ]);
     });
 

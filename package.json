@@ -20,12 +20,14 @@
     "socket.io": "~0.9.16",
     "lodash": "~2.4.1",
     "randomstring": "~1.0.3",
-    "redis": "~0.10.1"
+    "redis": "~0.10.1",
+    "request": "~2.34.0"
   },
   "devDependencies": {
     "sinon": "~1.9.1",
     "grunt-nodemon": "~0.2.1",
     "jshint-stylish": "~0.1.5",
-    "mockgoose": "~1.8.1"
+    "mockgoose": "~1.8.1",
+    "grunt-shell": "~0.7.0"
   }
 }

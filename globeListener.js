@@ -2,7 +2,7 @@
 
 var _ = require('lodash');
 var redisSession = require('./shared/redisSession');
-var redisClient = require('./shared/redisConnect')();
+var redisClient = require('./shared/redisConnect')(process.env.REDIS_URI);
 
 var io;
 

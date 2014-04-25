@@ -2,9 +2,14 @@
 
 //--- initialize
 var port = process.env.PORT || 9100;
+
 console.log('NODE_ENV: ', process.env.NODE_ENV);
-console.log(process.env.APP_NAME + 'listening on port ' + port);
-var io = require('socket.io').listen(port);
+console.log(process.env.APP_NAME + ' listening on port ' + port);
+
+var app = require('http').createServer(function(){});
+var io = require('socket.io').listen(app);
+
+app.listen(port);
 
 
 //--- mongoose connect
