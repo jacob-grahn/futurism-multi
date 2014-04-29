@@ -7,15 +7,11 @@ var self = {
 
 
     activate: function(game) {
-        /*game.eventEmitter.on(game.TURN_END, self.death);
-        game.eventEmitter.on(game.ABILITY_AFTER, self.death);*/
         game.eventEmitter.on(game.CHANGE, self.death);
     },
 
 
     deactivate: function(game) {
-        /*game.eventEmitter.removeListener(game.TURN_END, self.death);
-        game.eventEmitter.removeListener(game.ABILITY_AFTER, self.death);*/
         game.eventEmitter.removeListener(game.CHANGE, self.death);
     },
 
