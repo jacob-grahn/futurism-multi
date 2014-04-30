@@ -63,7 +63,9 @@ Lobby.createRoom = function(lobbyId) {
         };
         lobby.matchups.store(matchup.id, matchup);
         broadcast(lobbyId, 'createMatchup', matchup);
-        lobby.joinMatchup(account, matchup.id);
+        if(account) {
+            lobby.joinMatchup(account, matchup.id);
+        }
         return matchup;
     };
 
@@ -117,7 +119,7 @@ Lobby.createRoom = function(lobbyId) {
         });
 
         broadcast(lobbyId, 'leaveMatchup', {id: matchup.id, user:account});
-        cleanMatchup(matchup);
+        lobby.cleanMatchup(matchup);
 
         return 'ok';
     };
@@ -131,6 +133,7 @@ Lobby.createRoom = function(lobbyId) {
         var gameId = 'open:game:' + randomString.generate(12);
         new Game(matchup.accounts, matchup.rules, gameId);
         broadcast(lobbyId, 'startMatchup', {id: matchup.id, gameId: gameId});
+        matchup.started = true;
         lobby.matchups.deleteId(matchup.id);
     };
 
@@ -139,7 +142,7 @@ Lobby.createRoom = function(lobbyId) {
      * Remove a matchup if it is empty
      * @param {object} matchup
      */
-    var cleanMatchup = function(matchup) {
+    lobby.cleanMatchup = function(matchup) {
         if(matchup.accounts.length === 0) {
             broadcast(lobbyId, 'removeMatchup', matchup.id);
             lobby.matchups.deleteId(matchup.id);
