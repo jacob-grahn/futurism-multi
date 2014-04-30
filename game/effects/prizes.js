@@ -28,6 +28,7 @@ var self = {
             if(err) {
                 game.emit('error', err);
             }
+            game.eventEmitter.emit(game.PRIZES_SAVED, game);
         });
     }
 
