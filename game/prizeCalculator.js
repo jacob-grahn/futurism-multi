@@ -5,6 +5,7 @@
     var async = require('async');
     var Elo = require('../fns/elo');
     var StatGoose = require('../shared/models/Stats');
+    var pruneOld = require('../fns/pruneOld');
 
 
     /**
@@ -81,6 +82,7 @@
                 player.elo = player.oldElo = user.oldElo = user.elo;
                 player.fame = player.oldFame = user.oldFame = user.fame;
                 player.fractures = player.oldFractures = user.oldFractures = user.fractures;
+                player.matchTimes = user.matchTimes;
             }
         });
     };
@@ -104,6 +106,7 @@
                 user.fame = player.fame;
                 user.fractures = player.fractures;
                 user.deck = player.deck;
+                user.matchTimes = player.matchTimes;
             }
         });
     };
@@ -179,6 +182,22 @@
             });
         }
     };
+    
+    
+    /**
+     * Limit the number of times a player can win fame per day
+     * Anti-simming
+     */
+    var limitPlays = function(users) {
+        _.each(users, function(user) {
+            var oneDay = 1000 * 60 * 60 * 24;
+            user.matchTimes = pruneOld.prune(user.matchTimes, oneDay);
+            user.matchTimes.push(new Date());
+            if(user.matchTimes.length >= 60) {
+                user.fame = user.oldFame;
+            }
+        });
+    };
 
 
     module.exports = {
@@ -210,6 +229,7 @@
                 calcNewElo(players, winningTeam);
                 calcFame(players, winningTeam);
                 calcFractures(players, winningTeam, prize);
+                limitPlays(players);
                 mergeChanges(players, users);
 
                 saveUsers(users, function(err) {
