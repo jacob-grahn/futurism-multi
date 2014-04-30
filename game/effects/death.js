@@ -16,7 +16,11 @@ var self = {
     },
 
 
-    death: function(game) {
+    death: function(game, cause) {
+        if(cause === 'death') {
+            return false;
+        }
+        
         var deaths = [];
         _.each(game.board.allTargets(), function(target) {
             if(target.card) {
