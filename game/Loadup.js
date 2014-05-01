@@ -3,10 +3,34 @@
 
     var _ = require('lodash');
     var DeckGoose = require('../shared/models/Deck');
-    var deckFns = require('../shared/deckFns');
+    var StatGoose = require('../shared/models/Stats');
     var cardFns = require('../shared/cardFns');
     var factions = require('../shared/factions');
+    var futures = require('../shared/futures');
     var nextCid = require('./nextCid');
+    
+    
+    var playerOwnsAllFutures = function(ownedFutures, futures) {
+        var ret = true;
+        _.each(futures, function(futureId) {
+            if(ownedFutures.indexOf(futureId) === -1) {
+                ret = false;
+            }
+        });
+        return ret;
+    };
+               
+               
+    var areValidFutures = function(futureIds) {
+        var ret = true;
+        var validArr = _.toArray(futures);
+        _.each(futureIds, function(futureId) {
+            if(validArr.indexOf(futureId) === -1) {
+                ret = false;
+            }
+        });
+        return ret;
+    };
 
 
     /**
@@ -98,8 +122,22 @@
          * @param {Function} callback
          */
         self.selectFutures = function(player, futures, callback) {
-            player.futures = futures;
-            return callback(null, futures);
+            if(futures.length > rules.futures) {
+                return callback('too many futures');
+            }
+            if(!areValidFutures(futures)) {
+                return callback('invalid future');
+            }
+            StatGoose.findById(player._id, 'futures', function(err, stats) {
+                if(err) {
+                    return callback(err);
+                }
+                if(!playerOwnsAllFutures(stats.futures, futures)) {
+                    return callback('you do not own all of these futures');
+                }
+                player.futures = futures;
+                return callback(null, futures);
+            });
         };
 
 
@@ -109,7 +147,7 @@
         self.nextIfDone = function() {
             var allLoaded = true;
             _.each(players, function(player) {
-                if(!player.cards.length > 0) {
+                if(player.cards.length === 0) {
                     allLoaded = false;
                 }
             });
