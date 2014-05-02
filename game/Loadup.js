@@ -69,9 +69,9 @@
                     if(player.cards.length > 0) {
                         return callback('a deck was already loaded for you');
                     }
-                    if(String(player._id) !== String(deck.userId)) {
+                    /*if(String(player._id) !== String(deck.userId)) {
                         return callback('you do not own this deck');
-                    }
+                    }*/
 
                     player.deck = deck;
                     player.deckSize = deck.cards.length;
