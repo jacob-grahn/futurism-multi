@@ -7,46 +7,49 @@ var self = {
 
 
     activate: function(game) {
-        game.eventEmitter.on(game.TURN_BEGIN, self.deBuf);
+        game.eventEmitter.on(game.TURN_BEGIN, self.deBufAllCards);
     },
 
 
     deactivate: function(game) {
-        game.eventEmitter.removeListener(game.TURN_BEGIN, self.deBuf);
+        game.eventEmitter.removeListener(game.TURN_BEGIN, self.deBufAllCards);
     },
 
 
-    deBuf: function(game) {
+    deBufAllCards: function(game) {
         _.each(game.turnOwners, function(player) {
 
-            //
+            // cards on the board
             var targets = game.board.playerTargets(player._id);
             _.each(targets, function(target) {
                 if(target.card) {
-                    target.card.attackBuf = 0;
-                    target.card.shield = 0;
-                    target.card.hero = 0;
+                    self.deBufCard(target.card);
                 }
             });
 
-            //
+            // cards in player's hands
             _.each(player.hand, function(card) {
-                card.attackBuf = 0;
-                card.shield = 0;
-                card.hero = 0;
+                self.deBufCard(card);
             });
 
-            //
+            // cards in player's graveyards
             _.each(player.graveyard, function(card) {
-                card.attackBuf = 0;
-                card.shield = 0;
-                card.hero = 0;
+                self.deBufCard(card);
             });
         });
 
         
         game.broadcastChanges('deBuf');
+    },
+    
+    
+    deBufCard: function(card) {
+        card.attackBuf = 0;
+        card.shield = 0;
+        card.hero = 0;
     }
+    
+    
 
 };
 

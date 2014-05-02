@@ -26,17 +26,20 @@ var self = {
                     if(target.card.moves < 1) {
                         target.card.moves++;
                     }
+                    target.card.peaceful = 0;
                 }
             });
 
             // give cards in the hand 1 action point
             _.each(player.hand, function(card) {
                 card.moves = 1;
+                card.peaceful = 0;
             });
 
             // reset cards in the graveyard
             _.each(player.graveyard, function(card) {
                 card.moves = 0;
+                card.peaceful = 0;
             });
         });
 
