@@ -81,17 +81,6 @@ describe('loadup', function() {
         });
 
 
-        it("should not to be able to load someone else's deck", function(done) {
-            var loadup = new Loadup(players, rules, function() {});
-
-            var deckId = '2-deck';
-            loadup.selectDeck(player1, deckId, function(err) {
-                expect(err).toBe('you do not own this deck');
-                done();
-            });
-        });
-
-
         it('should not to be able to load more than one deck', function(done) {
             var loadup = new Loadup(players, rules, function() {});
 
