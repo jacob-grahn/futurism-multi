@@ -3,10 +3,11 @@
   "description": "socket.io server for Futurism, a multiplayer card game",
   "version": "0.0.5",
   "private": false,
+  "repository": "https://github.com/Jiggmin/futurism-multi",
   "main": "server.js",
   "scripts": {
     "start": "grunt serve",
-    "test": "jasmine-node spec --autotest --color --watch *.js config fns game shared"
+    "test": "jasmine-node spec --autotest --color --captureExceptions --watch *.js config fns game shared"
   },
   "engines": {
     "node": "0.10.x"

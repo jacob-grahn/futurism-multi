@@ -1,34 +1,34 @@
 'use strict';
 
-var _ = require('lodash');
 var Recorder = require('../Recorder');
 
 
 var self = {
 
 
-    activate: function(game) {
+    activate: function (game) {
         game.recorder = new Recorder();
-        game.eventEmitter.on(game.END, self.saveRecord);
+        game.eventEmitter.on(game.PRIZES_SAVED, self.saveRecord);
     },
 
 
-    deactivate: function(game) {
-        game.eventEmitter.removeListener(game.END, self.saveRecord);
+    deactivate: function (game) {
+        game.eventEmitter.removeListener(game.PRIZES_SAVED, self.saveRecord);
     },
 
 
     /**
-    * save a record of this game
-    */
-    saveRecord: function(game) {
+     * save a record of this game
+     */
+    saveRecord: function (game) {
         game.recorder.users = game.players;
-        game.recorder.save(game._id, function(err, doc) {
-            if(err) {
+        game.recorder.save(game._id, function (err) {
+            if (err) {
                 game.emit('error', err);
             }
-    });
-}
+            game.eventEmitter.emit(game.RECORD_SAVED, game);
+        });
+    }
 
 };
 

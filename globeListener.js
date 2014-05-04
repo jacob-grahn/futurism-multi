@@ -7,16 +7,6 @@ var redisClient = require('./shared/redisConnect')(process.env.REDIS_URI);
 var io;
 
 
-redisClient.on('message', function(channel, data) {
-    if(channel === 'sessionUpdate') {
-        updateUser(data);
-    }
-    if(channel === 'ipBan') {
-        //disconnectIp(data); have to figure out how to determine client ip address first
-    }
-});
-
-
 var updateUser = function(userId) {
 
     redisSession._get(userId, function(err, sessionData) {
@@ -53,6 +43,17 @@ var updateUser = function(userId) {
         });
     });
 };
+
+
+
+redisClient.on('message', function(channel, data) {
+    if(channel === 'sessionUpdate') {
+        updateUser(data);
+    }
+    if(channel === 'ipBan') {
+        //disconnectIp(data); have to figure out how to determine client ip address first
+    }
+});
 
 
 

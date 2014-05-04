@@ -4,7 +4,8 @@
     var _ = require('lodash');
     var async = require('async');
     var Elo = require('../fns/elo');
-    var UserGoose = require('../shared/models/Stats');
+    var StatGoose = require('../shared/models/Stats');
+    var pruneOld = require('../fns/pruneOld');
 
 
     /**
@@ -27,7 +28,7 @@
      * @param {function} callback
      */
     var loadUser = function(player, callback) {
-        UserGoose.findById(player._id, callback);
+        StatGoose.findById(player._id, callback);
     };
 
 
@@ -43,7 +44,7 @@
 
     /**
      * Save changed user data back to mongo
-     * @param {UserGoose} user
+     * @param {StatGoose} user
      * @param {function} callback
      */
     var saveUser = function(user, callback) {
@@ -53,7 +54,7 @@
 
     /**
      * Save array of users to mongo
-     * @param {array.<UserGoose>} users
+     * @param {array.<StatGoose>} users
      * @param {function} callback
      */
     var saveUsers = function(users, callback) {
@@ -67,7 +68,7 @@
     /**
      * Copy data from users to players
      * @param {array.<Player>} players - data coming from a finished game
-     * @param {array.<UserGoose>} users - data from mongo
+     * @param {array.<StatGoose>} users - data from mongo
      */
     var mergeData = function(players, users) {
         var lookup = {};
@@ -81,6 +82,7 @@
                 player.elo = player.oldElo = user.oldElo = user.elo;
                 player.fame = player.oldFame = user.oldFame = user.fame;
                 player.fractures = player.oldFractures = user.oldFractures = user.fractures;
+                player.matchTimes = user.matchTimes;
             }
         });
     };
@@ -104,6 +106,7 @@
                 user.fame = player.fame;
                 user.fractures = player.fractures;
                 user.deck = player.deck;
+                user.matchTimes = player.matchTimes;
             }
         });
     };
@@ -179,6 +182,22 @@
             });
         }
     };
+    
+    
+    /**
+     * Limit the number of times a player can win fame per day
+     * Anti-simming
+     */
+    var limitPlays = function(users) {
+        _.each(users, function(user) {
+            var oneDay = 1000 * 60 * 60 * 24;
+            user.matchTimes = pruneOld.prune(user.matchTimes, oneDay);
+            user.matchTimes.push(new Date());
+            if(user.matchTimes.length >= 60) {
+                user.fame = user.oldFame;
+            }
+        });
+    };
 
 
     module.exports = {
@@ -210,6 +229,7 @@
                 calcNewElo(players, winningTeam);
                 calcFame(players, winningTeam);
                 calcFractures(players, winningTeam, prize);
+                limitPlays(players);
                 mergeChanges(players, users);
 
                 saveUsers(users, function(err) {

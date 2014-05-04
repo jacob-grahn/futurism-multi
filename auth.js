@@ -19,6 +19,9 @@ module.exports = {
                 if(!sess) {
                     return callback('no session', socket);
                 }
+                if(sess.bannedUntil && new Date(sess.bannedUntil) > new Date()) {
+                    return callback('this account has been banned until ' +sess.bannedUntil, socket);
+                }
 
                 callback(null, socket, sess);
             });

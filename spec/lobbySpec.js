@@ -53,7 +53,7 @@ describe('lobby', function() {
         expect(err).toContain('already');
 
         var user2 = {_id:1};
-        var matchup3 = lobby.createMatchup(user2, {maxPride:70});
+        var matchup3 = lobby.createMatchup(user2, {maxPride:70, players: 4});
         lobby.joinMatchup(user, matchup3.id);
         expect(lobby.matchups.toArray().length).toBe(1);
         expect(lobby.matchups.toArray()[0].accounts.length).toBe(2);

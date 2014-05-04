@@ -24,10 +24,11 @@ var self = {
         if(game.winners.length > 0) {
             winningTeam = game.winners[0].team;
         }
-        prizeCalculator.run(game.players, winningTeam, false, function(err) {
+        prizeCalculator.run(game.players, winningTeam, game.rules.fracture, function(err) {
             if(err) {
                 game.emit('error', err);
             }
+            game.eventEmitter.emit(game.PRIZES_SAVED, game);
         });
     }
 

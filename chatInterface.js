@@ -2,7 +2,7 @@
 
 var Chat = require('./chat');
 var canJoinRoom = require('./canJoinRoom');
-
+var groups = require('./shared/groups');
 
 var ChatInterface = {
     initSocket: function(socket) {
@@ -12,9 +12,6 @@ var ChatInterface = {
 
                 var chat = Chat.getRoom(data.roomName);
 
-                if(account.silenced) {
-                    return socket.emitError('You have been silenced');
-                }
                 if(!canJoinRoom(account, data.roomName)) {
                     return socket.emitError('You can not send messages to this room');
                 }
@@ -29,6 +26,12 @@ var ChatInterface = {
 
 
         socket.onChat('chat', function(data, account, chat) {
+            if(account.silencedUntil) {
+                return socket.emitError('You have been silenced');
+            }
+            if(account.group === groups.GUEST) {
+                return socket.emitError('Guests can not chat');
+            }
             chat.add(account, data.txt);
         });
 

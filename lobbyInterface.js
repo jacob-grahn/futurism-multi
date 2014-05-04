@@ -26,6 +26,9 @@ module.exports = {
         };
 
         socket.onLobby('createMatchup', function(data, account, lobby) {
+            data.rules = data.rules || {};
+            delete data.rules.fracture;
+            delete data.rules.big;
             lobby.createMatchup(account, data.rules);
         });
 

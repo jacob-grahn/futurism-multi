@@ -21,7 +21,7 @@ var FutureManager = require('./futures/FutureManager');
  * @param {object} rules
  * @param {string} gameId
  */
-module.exports = function(accounts, rules, gameId) {
+module.exports = function (accounts, rules, gameId) {
     var self = this;
 
 
@@ -35,13 +35,15 @@ module.exports = function(accounts, rules, gameId) {
     self.ABILITY_DURING = 'abilityDuring';
     self.ABILITY_AFTER = 'abilityAfter';
     self.CHANGE = 'change';
+    self.PRIZES_SAVED = 'prizesSaved';
+    self.RECORD_SAVED = 'recordSaved';
     self.END = 'end';
 
 
     /**
      * just exit if no players are here
      */
-    if(accounts.length === 0) {
+    if (accounts.length === 0) {
         return;
     }
 
@@ -64,7 +66,7 @@ module.exports = function(accounts, rules, gameId) {
     /**
      * preload decks and futures
      */
-    self.loadup = new Loadup(self.players, rules, function() {
+    self.loadup = new Loadup(self.players, rules, function () {
 
 
         /**
@@ -85,7 +87,7 @@ module.exports = function(accounts, rules, gameId) {
              * at the start of every turn
              * @param {Number} startTime
              */
-            function(startTime) {
+            function (startTime) {
                 self.turnOwners = self.turnTicker.turnOwners;
                 self.broadcastChanges('turn');
                 self.eventEmitter.emit(self.TURN_BEGIN, self, startTime);
@@ -96,7 +98,7 @@ module.exports = function(accounts, rules, gameId) {
              * at the end of every turn
              * @param {Number} elapsed
              */
-            function(elapsed) {
+            function (elapsed) {
                 self.eventEmitter.emit(self.TURN_END, self, elapsed);
             }
         );
@@ -105,17 +107,26 @@ module.exports = function(accounts, rules, gameId) {
 
     /**
      *
+     */
+    self.eventEmitter.on(self.RECORD_SAVED, function () {
+        self.emit('gameOver', {
+            winners: _.map(self.winners, function (winner) {
+                return winner._id;
+            })
+        });
+        _.delay(self.remove, 1000);
+    });
+
+
+    /**
+     *
      * @param {Array.<Player>} winners
      */
-    self.setWinners = function(winners) {
+    self.setWinners = function (winners) {
         self.winners = winners;
         self.state = 'awarding';
         self.turnTicker.stop();
         self.eventEmitter.emit(self.END, self);
-        self.emit('gameOver', {winners: _.map(winners, function(winner) {
-            return winner._id;
-        })});
-        _.delay(self.remove, 1000);
     };
 
 
@@ -125,10 +136,10 @@ module.exports = function(accounts, rules, gameId) {
      * @param cid
      * @returns {*}
      */
-    self.cidToCard = function(cards, cid) {
+    self.cidToCard = function (cards, cid) {
         var matchCard = null;
-        _.each(cards, function(card) {
-            if(card.cid === cid) {
+        _.each(cards, function (card) {
+            if (card.cid === cid) {
                 matchCard = card;
             }
         });
@@ -143,26 +154,26 @@ module.exports = function(accounts, rules, gameId) {
      * Create an array of every card in the game
      * @returns {Array}
      */
-    self.allCards = function() {
+    self.allCards = function () {
         var cards = [];
 
         // loop through each player
-        _.each(self.players, function(player) {
+        _.each(self.players, function (player) {
 
             // cards on the board
-            _.each(self.board.playerTargets(player._id), function(target) {
-                if(target.card) {
+            _.each(self.board.playerTargets(player._id), function (target) {
+                if (target.card) {
                     cards.push(target.card);
                 }
             });
 
             // cards in hand
-            _.each(player.hand, function(card) {
+            _.each(player.hand, function (card) {
                 cards.push(card);
             });
 
             // cards in graveyard
-            _.each(player.graveyard, function(card) {
+            _.each(player.graveyard, function (card) {
                 cards.push(card);
             });
         });
@@ -177,10 +188,10 @@ module.exports = function(accounts, rules, gameId) {
      * @param {number} id
      * @returns {Player} player
      */
-    self.idToPlayer = function(id) {
+    self.idToPlayer = function (id) {
         var match = null;
-        _.each(self.players, function(player) {
-            if(String(player._id) === String(id)) {
+        _.each(self.players, function (player) {
+            if (String(player._id) === String(id)) {
                 match = player;
             }
         });
@@ -191,10 +202,10 @@ module.exports = function(accounts, rules, gameId) {
     /**
      * Returns a snapshot of everything in this game
      */
-    self.getStatus = function() {
+    self.getStatus = function () {
         var status = {};
 
-        status.players = _.assign({}, _.map(self.players, function(player) {
+        status.players = _.assign({}, _.map(self.players, function (player) {
             return _.pick(player, '_id', 'team', 'name', 'site', 'pride');
         }));
 
@@ -214,8 +225,8 @@ module.exports = function(accounts, rules, gameId) {
      * @param player
      * @returns {string}
      */
-    self.endTurn = function(player) {
-        if(!self.turnTicker.isTheirTurn(player)) {
+    self.endTurn = function (player) {
+        if (!self.turnTicker.isTheirTurn(player)) {
             return 'it is not your turn';
         }
         self.turnTicker.endTurn();
@@ -228,7 +239,7 @@ module.exports = function(accounts, rules, gameId) {
      * @param {string} event
      * @param {*} data
      */
-    self.emit = function(event, data) {
+    self.emit = function (event, data) {
         broadcast(gameId, event, data);
     };
 
@@ -236,11 +247,15 @@ module.exports = function(accounts, rules, gameId) {
     /**
      * broadcast changes as a partial update
      */
-    self.broadcastChanges = function(cause, data) {
+    self.broadcastChanges = function (cause, data) {
         var status = self.getStatus();
         var changes = self.diffTracker.diff(status, false);
-        if(!_.isEmpty(changes)) {
-            self.emit('gameUpdate', {cause: cause, changes: changes, data: data});
+        if (!_.isEmpty(changes)) {
+            self.emit('gameUpdate', {
+                cause: cause,
+                changes: changes,
+                data: data
+            });
             self.eventEmitter.emit(self.CHANGE, self, cause, changes, data);
         }
     };
@@ -252,31 +267,38 @@ module.exports = function(accounts, rules, gameId) {
      * @param {String} actionId
      * @param {Array} targetChain
      */
-    self.doAction = function(player, actionId, targetChain) {
+    self.doAction = function (player, actionId, targetChain) {
 
         // its gotta be your turn
-        if(!self.turnTicker.isTheirTurn(player)) {
+        if (!self.turnTicker.isTheirTurn(player)) {
             return 'it is not your turn';
         }
 
         // pre action
         self.actionError = null;
         self.eventEmitter.emit(self.ABILITY_BEFORE, self, player, actionId, targetChain);
-        if(self.actionError) {
-            return {err: self.actionError};
+        if (self.actionError) {
+            return {
+                err: self.actionError
+            };
         }
 
         // do the action
         var result = actionFns.doAction(self, player, actionId, targetChain);
-        if(result && result.err) {
+        if (result && result.err) {
             return result;
         }
 
         // broadcast if the action was successful
         self.eventEmitter.emit(self.ABILITY_DURING, self, actionId, targetChain, result);
-        self.broadcastChanges(actionId, {result: result, targetChain: targetChain});
+        self.broadcastChanges(actionId, {
+            result: result,
+            targetChain: targetChain
+        });
         self.eventEmitter.emit(self.ABILITY_AFTER, self);
-        return {success: true};
+        return {
+            success: true
+        };
 
     };
 
@@ -284,7 +306,7 @@ module.exports = function(accounts, rules, gameId) {
     /**
      * Clean up for removal
      */
-    self.remove = function() {
+    self.remove = function () {
         self.state = 'removed';
         accounts = null;
         self.board.clear();
@@ -297,7 +319,7 @@ module.exports = function(accounts, rules, gameId) {
     /**
      * forfeit a player from the game
      */
-    self.forfeit = function(player) {
+    self.forfeit = function (player) {
         player.cards = [];
         player.hand = [];
         player.graveyard = [];
@@ -314,4 +336,3 @@ module.exports = function(accounts, rules, gameId) {
      */
     gameLookup.store(gameId, self);
 };
-

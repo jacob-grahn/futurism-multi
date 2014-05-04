@@ -51,6 +51,9 @@ module.exports = function (grunt) {
         shell: {
             deploy: {
                 command: 'modulus deploy --project-name futurism-multi-staging'
+            },
+            deployLive: {
+                command: 'modulus deploy --project-name futurism-multi'
             }
         }
 
@@ -68,6 +71,13 @@ module.exports = function (grunt) {
     grunt.registerTask('deploy', function() {
         grunt.task.run([
             'shell:deploy'
+        ]);
+    });
+    
+    
+    grunt.registerTask('deployLive', function() {
+        grunt.task.run([
+            'shell:deployLive'
         ]);
     });
 
