@@ -1,6 +1,12 @@
 'use strict';
 
+var _ = require('lodash');
+
 var canJoinRoom = function(account, room) {
+    if(!_.isString(room)) {
+        return false;
+    }
+    
     var arr = room.split(':');
 
     if(arr.length !== 3) {
