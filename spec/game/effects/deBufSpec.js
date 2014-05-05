@@ -27,7 +27,7 @@ describe('effects/deBuf', function() {
             broadcastChanges: sinon.spy()
         };
 
-        deBuf.deBuf(game);
+        deBuf.deBufAllCards(game);
 
         expect(targets[0].card.shield).toBe(0);
         expect(targets[0].card.attackBuf).toBe(0);

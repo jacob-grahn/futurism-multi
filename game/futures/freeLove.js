@@ -2,12 +2,17 @@
 
 var _ = require('lodash');
 var futures = require('../../shared/futures');
+var refresh = require('../effects/refresh');
 
 var self = {
 
 
     activate: function(game) {
         game.eventEmitter.on(game.TURN_END, self.freeLove);
+        
+        //hacky ass way to get freeLive to run before refresh
+        refresh.deactivate(game);
+        refresh.activate(game);
     },
 
 
