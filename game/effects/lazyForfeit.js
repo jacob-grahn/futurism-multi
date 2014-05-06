@@ -28,6 +28,9 @@ var self = {
 
     lazyForfeit: function(game) {
         _.each(game.turnOwners, function(player) {
+            if(player.forfeited) {
+                return;
+            }
 
             // default values
             player.idleTurns = player.idleTurns || 0;
