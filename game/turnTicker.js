@@ -20,11 +20,10 @@
         var beginCallback;
         var endCallback;
 
-        timePerTurn = timePerTurn || 30000;
-
         self.turn = 1;
         self.turnOwners = [];
         self.startTime = 0;
+        self.timePerTurn = timePerTurn || 30000;
 
 
         /**
@@ -57,6 +56,14 @@
          */
         self.getElapsed = function() {
             return (+new Date()) - self.startTime;
+        };
+        
+        
+        /**
+         * @returns {Number}
+         */
+        self.getTimeLeft = function() {
+            return self.timePerTurn - self.getElapsed();
         };
 
 
@@ -133,7 +140,7 @@
             self.startTime = +new Date();
             self.populateTurn();
 
-            var turnExpireTime = timePerTurn;
+            var turnExpireTime = self.timePerTurn;
             if(self.getActivePlayers() === 0) {
                 turnExpireTime = 1000;
             }

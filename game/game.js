@@ -213,7 +213,7 @@ module.exports = function (accounts, rules, gameId) {
         status.board = self.board.getMini();
         status.turn = self.turnTicker.turn;
         status.turnOwners = self.turnTicker.getTurnOwnerIds();
-        status.startTime = self.turnTicker.startTime;
+        status.timeLeft = Math.round(self.turnTicker.getTimeLeft() / 1000);
         status.state = self.state;
 
         return status;
