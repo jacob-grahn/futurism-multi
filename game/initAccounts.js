@@ -1,11 +1,33 @@
 'use strict';
 
 var _ = require('lodash');
-var gameLookup = require('./gameLookup');
-var factions = require('../shared/factions');
 var actions = require('../shared/actions');
 var Player = require('./Player');
 var nextCid = require('./nextCid');
+
+
+
+/**
+ * Create a card to represent the player
+ * @param {object} account
+ */
+var makeAccountCard = function(account) {
+    return {
+        _id: 0,
+        commander: true,
+        userId: account._id,
+        name: account.name,
+        faction: 'no',
+        attack: 1,
+        health: 9,
+        story: '',
+        abilities: [actions.SUMMON, actions.FUTURE, actions.ATTACK],
+        cid: nextCid(),
+        moves: 1,
+        pride: 0
+    };
+};
+
 
 
 /**
@@ -23,28 +45,6 @@ var InitAccounts = function(accounts) {
     });
 
     return players;
-};
-
-
-/**
- * Create a card to represent the player
- * @param {object} account
- */
-var makeAccountCard = function(account) {
-    return {
-        _id: 0,
-        commander: true,
-        userId: account._id,
-        name: account.name,
-        faction: 'no',
-        attack: 0,
-        health: 10,
-        story: '',
-        abilities: [actions.SUMMON, actions.FUTURE],
-        cid: nextCid(),
-        moves: 1,
-        pride: 0
-    };
 };
 
 

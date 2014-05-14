@@ -9,7 +9,7 @@ var self = {
     activate: function(game) {
         game.eventEmitter.on(game.TURN_END, self.prideUp);
         _.each(game.players, function(player) {
-            player.pride = player.pride || 1;
+            player.pride = game.rules.startPride;
         });
     },
 
