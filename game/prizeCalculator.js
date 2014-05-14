@@ -3,6 +3,7 @@
 
     var _ = require('lodash');
     var async = require('async');
+    var request = require('request');
     var Elo = require('../fns/elo');
     var StatGoose = require('../shared/models/Stats');
     var pruneOld = require('../fns/pruneOld');
@@ -198,6 +199,43 @@
             }
         });
     };
+    
+    
+    
+    var saveGp = function(player) {
+        var gp = player.gpGain;
+        if(gp > 0) {
+            var options = {
+                form: {
+                    app: process.env.APP_NAME,
+                    userId: player._id,
+                    gp: gp,
+                    key: process.env.GLOBE_KEY
+                }
+            };
+
+            /*request.post(process.env.GLOBE_URI+'/guild/'+player.guild, options, function(err, response, body) {
+                console.log(err, response, body);
+            });*/
+        }
+    };
+    
+    
+    
+    var calcGp = function(players) {
+        _.each(players, function(player) {
+            var gp = 0;
+            if(player.oldFame < player.fame) {
+                gp = 1;
+            }
+            if(player.oldFractures < player.fractures) {
+                gp = 5;
+            }
+            player.gpGain = gp;
+            saveGp(player);
+        });
+    };
+            
 
 
     module.exports = {
@@ -231,6 +269,7 @@
                 calcFractures(players, winningTeam, prize);
                 limitPlays(players);
                 mergeChanges(players, users);
+                calcGp(users);
 
                 saveUsers(users, function(err) {
                     if(err) {
