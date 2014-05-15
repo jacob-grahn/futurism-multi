@@ -26,7 +26,15 @@ var self = {
             if(target.card) {
                 if(target.card.health <= 0) {
                     var card = target.card;
+                    
                     card.health = 0;
+                    card.poison = 0;
+                    card.hero = 0;
+                    card.moves = 0;
+                    card.peaceful = 0;
+                    card.attackBuf = 0;
+                    card.shield = 0;
+                    
                     target.player.graveyard.push(card);
                     target.card = null;
                     deaths.push({

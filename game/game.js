@@ -74,7 +74,6 @@ module.exports = function (accounts, rules, gameId) {
          */
         self.state = 'running';
         self.eventEmitter.emit(self.STARTUP, self);
-        self.turnTicker.populateTurn();
 
 
         /**
@@ -123,10 +122,12 @@ module.exports = function (accounts, rules, gameId) {
      * @param {Array.<Player>} winners
      */
     self.setWinners = function (winners) {
-        self.winners = winners;
-        self.state = 'awarding';
-        self.turnTicker.stop();
-        self.eventEmitter.emit(self.END, self);
+        if(self.state === 'running') {
+            self.winners = winners;
+            self.state = 'awarding';
+            self.turnTicker.stop();
+            self.eventEmitter.emit(self.END, self);
+        }
     };
 
 
@@ -320,13 +321,15 @@ module.exports = function (accounts, rules, gameId) {
      * forfeit a player from the game
      */
     self.forfeit = function (player) {
-        player.cards = [];
-        player.hand = [];
-        player.graveyard = [];
-        player.forfeited = true;
-        self.board.areas[player._id].targets = [];
-        self.broadcastChanges('forfeit');
-        self.endTurn(player);
+        if(!player.forfeited) {
+            player.cards = [];
+            player.hand = [];
+            player.graveyard = [];
+            player.forfeited = true;
+            self.board.areas[player._id].targets = [];
+            self.broadcastChanges('forfeit');
+            self.endTurn(player);
+        }
     };
 
 

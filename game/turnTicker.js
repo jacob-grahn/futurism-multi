@@ -76,7 +76,6 @@
                 if(endCallback) {
                     endCallback(self.getElapsed(), self.turnOwners);
                 }
-                self.turn++;
                 nextTurn();
             }
         };
@@ -91,20 +90,13 @@
             return (self.turnOwners.indexOf(player) !== -1);
         };
 
-
-        /**
-         * fill turnOwners with players who are active this turn
-         */
-        self.populateTurn = function() {
-            self.turnOwners = getTurnOwners(self.turn);
-        };
-
+        
 
         /**
          * select players based on which turn it is
          */
         var getTurnOwners = function(turn) {
-            var index = (turn+1) % playerCount;
+            var index = turn % playerCount;
             var player = players[index];
             var owners = [player];
             return owners;
@@ -123,13 +115,15 @@
 
         /**
          * Return numbers of active players there are this turn
+         * @param {Number} turn
          * @returns {number}
          */
-        self.getActivePlayers = function() {
-            var activePlayers = _.filter(self.turnOwners, function(player) {
+        self.getActiveTurnOwners = function(turn) {
+            var turnOwners = getTurnOwners(turn);
+            var activePlayers = _.filter(turnOwners, function(player) {
                 return !player.forfeited;
             });
-            return activePlayers.length;
+            return activePlayers;
         };
 
 
@@ -137,15 +131,15 @@
          * Move a turn to the next player in line
          */
         var nextTurn = function() {
-            self.startTime = +new Date();
-            self.populateTurn();
-
-            var turnExpireTime = self.timePerTurn;
-            if(self.getActivePlayers() === 0) {
-                turnExpireTime = 1000;
+            
+            self.turn++;
+            while(self.getActiveTurnOwners(self.turn).length === 0 && self.turn < 999) {
+                self.turn++;
             }
-
-            intervalId = setTimeout(self.endTurn, turnExpireTime);
+            
+            self.startTime = +new Date();
+            self.turnOwners = getTurnOwners(self.turn);
+            intervalId = setTimeout(self.endTurn, self.timePerTurn);
 
             if(beginCallback) {
                 beginCallback(self.startTime, self.turnOwners);
