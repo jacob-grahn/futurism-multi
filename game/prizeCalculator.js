@@ -187,7 +187,6 @@
     
     /**
      * Limit the number of times a player can win fame per day
-     * Anti-simming
      */
     var limitPlays = function(users) {
         _.each(users, function(user) {
@@ -203,33 +202,43 @@
     
     
     var saveGp = function(player) {
+        if(!player.guild) {
+            return false;
+        }
+        
         var gp = player.gpGain;
         if(gp > 0) {
             var options = {
                 form: {
                     app: process.env.APP_NAME,
                     userId: player._id,
-                    gp: gp,
+                    inc: gp,
                     key: process.env.GLOBE_KEY
                 }
             };
+            
+            var uri = process.env.GLOBE_URI + '/guilds/' + player.guild + '/members/' + player._id + '/gp';
 
-            /*request.post(process.env.GLOBE_URI+'/guild/'+player.guild, options, function(err, response, body) {
-                console.log(err, response, body);
-            });*/
+            request.post(uri, options, function(err) {
+                if(err) {
+                    console.log('saveGp: ' + err);
+                }
+            });
         }
     };
     
     
     
-    var calcGp = function(players) {
+    var calcGp = function(players, winningTeam, prize) {
         _.each(players, function(player) {
             var gp = 0;
-            if(player.oldFame < player.fame) {
-                gp = 1;
-            }
-            if(player.oldFractures < player.fractures) {
-                gp = 5;
+            if(player.team === winningTeam) {
+                if(prize) {
+                    gp = 5;
+                }
+                else {
+                    gp = 1;
+                }
             }
             player.gpGain = gp;
             saveGp(player);
@@ -268,8 +277,8 @@
                 calcFame(players, winningTeam);
                 calcFractures(players, winningTeam, prize);
                 limitPlays(players);
+                calcGp(players, winningTeam, prize);
                 mergeChanges(players, users);
-                calcGp(users);
 
                 saveUsers(users, function(err) {
                     if(err) {
