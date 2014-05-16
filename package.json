@@ -22,7 +22,8 @@
     "lodash": "~2.4.1",
     "randomstring": "~1.0.3",
     "redis": "~0.10.1",
-    "request": "~2.34.0"
+    "request": "~2.34.0",
+    "ratelimiter": "~1.0.1"
   },
   "devDependencies": {
     "sinon": "~1.9.1",

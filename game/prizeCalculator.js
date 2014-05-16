@@ -6,7 +6,9 @@
     var request = require('request');
     var Elo = require('../fns/elo');
     var StatGoose = require('../shared/models/Stats');
-    var pruneOld = require('../fns/pruneOld');
+    var redisClient = require('../shared/redisConnect')(process.env.REDIS_URI);
+    var Limiter = require('ratelimiter');
+    
 
 
     /**
@@ -188,14 +190,27 @@
     /**
      * Limit the number of times a player can win fame per day
      */
-    var limitPlays = function(users) {
-        _.each(users, function(user) {
-            var oneDay = 1000 * 60 * 60 * 24;
-            user.matchTimes = pruneOld.prune(user.matchTimes, oneDay);
-            user.matchTimes.push(new Date());
-            if(user.matchTimes.length >= 60) {
-                user.fame = user.oldFame;
-            }
+    var limitPlays = function(players, callback) {
+        var oneDay = 1000 * 60 * 60 * 24;
+        var max = 60;
+        
+        async.map(players, function(player, cb) {
+            var limitId = 'fm:prizes:' + player._id;
+            var limit = new Limiter({ id: limitId, db: redisClient, max: max, duration: oneDay });
+            
+            limit.get(function(err, count) {
+                if (err) {
+                    return err;
+                }
+                if (count.remaining <= 0) {
+                    player.rateLimited = true;
+                    player.fame = player.oldFame;
+                }
+                cb();
+            });
+        },
+        function(err) {
+            return callback(err);
         });
     };
     
@@ -232,7 +247,7 @@
     var calcGp = function(players, winningTeam, prize) {
         _.each(players, function(player) {
             var gp = 0;
-            if(player.team === winningTeam) {
+            if(!player.rateLimited && player.team === winningTeam) {
                 if(prize) {
                     gp = 5;
                 }
@@ -276,15 +291,19 @@
                 calcNewElo(players, winningTeam);
                 calcFame(players, winningTeam);
                 calcFractures(players, winningTeam, prize);
-                limitPlays(players);
-                calcGp(players, winningTeam, prize);
-                mergeChanges(players, users);
-
-                saveUsers(users, function(err) {
+                limitPlays(players, function(err) {
                     if(err) {
                         return callback(err);
                     }
-                    return callback(null, users);
+                    
+                    calcGp(players, winningTeam, prize);
+                    mergeChanges(players, users);
+                    saveUsers(users, function(err) {
+                        if(err) {
+                            return callback(err);
+                        }
+                        return callback(null, users);
+                    });
                 });
             });
         }
