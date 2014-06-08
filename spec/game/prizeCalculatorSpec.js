@@ -6,7 +6,7 @@ describe('game/prizeCalculator', function() {
     var mockgoose = require('mockgoose');
     mockgoose(mongoose);
 
-    var UserGoose = require('../../shared/models/Stats');
+    var Progress = require('../../shared/models/Progress');
     var PrizeCalculator = require('../../game/prizeCalculator');
     var Elo = require('../../fns/elo');
 
@@ -19,7 +19,7 @@ describe('game/prizeCalculator', function() {
         uid2 = mongoose.Types.ObjectId();
         uid3 = mongoose.Types.ObjectId();
 
-        UserGoose.create({
+        Progress.create({
             _id: uid1,
             name: 'Kronk',
             site: 'j',
@@ -34,7 +34,7 @@ describe('game/prizeCalculator', function() {
             }
 
 
-            UserGoose.create({
+            Progress.create({
                 _id: uid2,
                 name: 'Blazer',
                 site: 'j',
@@ -49,7 +49,7 @@ describe('game/prizeCalculator', function() {
                 }
 
 
-                UserGoose.create({
+                Progress.create({
                     _id: uid3,
                     name: 'Awful',
                     site: 'j',
@@ -98,7 +98,7 @@ describe('game/prizeCalculator', function() {
     });
 
 
-    it('should return the updated UserGooses', function(done) {
+    it('should return the updated Progresss', function(done) {
         var players = [{_id:uid1}];
         var winningTeam = 0;
         var prize = false;
@@ -171,7 +171,7 @@ describe('game/prizeCalculator', function() {
         var prize = true;
         PrizeCalculator.run(players, winningTeam, prize, function(err) {
             expect(err).toBeFalsy();
-            UserGoose.findById(uid3, function(err, doc) {
+            Progress.findById(uid3, function(err, doc) {
                 expect(err).toBeFalsy();
                 expect(doc.fractures).toBe(3);
                 expect(doc.fame > 9765).toBe(true);

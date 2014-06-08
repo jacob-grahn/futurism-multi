@@ -8,11 +8,10 @@ describe('game', function() {
 
     var _ = require('lodash');
     var Game = require('../../game/game');
-    var DeckGoose = require('../../shared/models/Deck');
-    var CardGoose = require('../../shared/models/Card');
-    var UserGoose = require('../../shared/models/Stats');
+    var Deck = require('../../shared/models/Deck');
+    var Card = require('../../shared/models/Card');
+    var Progress = require('../../shared/models/Progress');
     var broadcast = require('../../broadcast');
-
 
     var uid1 = mongoose.Types.ObjectId();
     var uid2 = mongoose.Types.ObjectId();
@@ -20,7 +19,7 @@ describe('game', function() {
 
     beforeEach(function(done) {
 
-        UserGoose.create({
+        Progress.create({
             _id: uid1,
             name: 'phil',
             site: 'j',
@@ -31,7 +30,7 @@ describe('game', function() {
         },
         function(err1) {
 
-            UserGoose.create({
+            Progress.create({
                 _id: uid2,
                 name: 'paulina',
                 site: 'j',
@@ -42,7 +41,7 @@ describe('game', function() {
             },
             function(err2) {
 
-                UserGoose.create({
+                Progress.create({
                     _id: uid3,
                     name: 'jetson',
                     site: 'j',
@@ -53,7 +52,7 @@ describe('game', function() {
                 },
                 function(err3) {
 
-                    DeckGoose.create({
+                    Deck.create({
                         _id: 'deck1',
                         name: 'deck1',
                         cards: ['card1'],
@@ -62,7 +61,7 @@ describe('game', function() {
                     },
                     function(err4) {
 
-                        DeckGoose.create({
+                        Deck.create({
                             _id: 'deck2',
                             name: 'deck2',
                             cards: ['card1', 'card1'],
@@ -71,7 +70,7 @@ describe('game', function() {
                         },
                         function(err5) {
 
-                            CardGoose.create({
+                            Card.create({
                                 _id: 'card1',
                                 name: 'kicker',
                                 pride: 1,
@@ -190,12 +189,12 @@ describe('game', function() {
                     expect(game.getStatus().state).toBe('removed');
                     expect(broadcast.lastMessage.event).toBe('gameOver');
 
-                    UserGoose.findById(uid1, function(err, doc) {
+                    Progress.findById(uid1, function(err, doc) {
                         expect(err).toBe(null);
                         expect(doc.elo > 150).toBe(true);
                         expect(doc.fame > 0).toBe(true);
 
-                        UserGoose.findById(uid2, function(err, doc) {
+                        Progress.findById(uid2, function(err, doc) {
                             expect(err).toBe(null);
                             expect(doc.elo < 549).toBe(true);
                             expect(doc.fame > 30).toBe(true);

@@ -3,7 +3,7 @@
 
     var _ = require('lodash');
     var DeckGoose = require('../shared/models/Deck');
-    var StatGoose = require('../shared/models/Stats');
+    var Progress = require('../shared/models/Progress');
     var cardFns = require('../shared/cardFns');
     var factions = require('../shared/factions');
     var futures = require('../shared/futures');
@@ -128,11 +128,11 @@
             if(!areValidFutures(futures)) {
                 return callback('invalid future');
             }
-            StatGoose.findById(player._id, 'futures', function(err, stats) {
+            Progress.findById(player._id, 'futures', function(err, progress) {
                 if(err) {
                     return callback(err);
                 }
-                if(!playerOwnsAllFutures(stats.futures, futures)) {
+                if(!playerOwnsAllFutures(progress.futures, futures)) {
                     return callback('you do not own all of these futures');
                 }
                 player.futures = futures;

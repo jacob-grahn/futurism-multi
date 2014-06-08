@@ -9,7 +9,7 @@ describe('loadup', function() {
 
     var DeckGoose = require('../../shared/models/Deck');
     var CardGoose = require('../../shared/models/Card');
-    var StatGoose = require('../../shared/models/Stats');
+    var Progress = require('../../shared/models/Progress');
     var futures = require('../../shared/futures');
     var Loadup = require('../../game/Loadup');
     var Player = require('../../game/Player');
@@ -145,7 +145,7 @@ describe('loadup', function() {
         var loadup;
         
         beforeEach(function() {
-            sinon.stub(StatGoose, 'findById').yields(
+            sinon.stub(Progress, 'findById').yields(
                 null,
                 { _id: '535f5314daed8f3230428623', futures: [ futures.EDEN, futures.NUCLEAR_WAR ] }
             );
@@ -155,7 +155,7 @@ describe('loadup', function() {
         });
         
         afterEach(function() {
-            StatGoose.findById.restore();
+            Progress.findById.restore();
         });
         
         it('should accept a valid selection', function(done) {

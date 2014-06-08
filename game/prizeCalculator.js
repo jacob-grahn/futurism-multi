@@ -5,7 +5,7 @@
     var async = require('async');
     var request = require('request');
     var Elo = require('../fns/elo');
-    var StatGoose = require('../shared/models/Stats');
+    var Progress = require('../shared/models/Progress');
     var redisClient = require('../shared/redisConnect')(process.env.REDIS_URI);
     var Limiter = require('ratelimiter');
     
@@ -31,7 +31,7 @@
      * @param {function} callback
      */
     var loadUser = function(player, callback) {
-        StatGoose.findById(player._id, callback);
+        Progress.findById(player._id, callback);
     };
 
 
@@ -47,7 +47,7 @@
 
     /**
      * Save changed user data back to mongo
-     * @param {StatGoose} user
+     * @param {Progress} user
      * @param {function} callback
      */
     var saveUser = function(user, callback) {
@@ -57,7 +57,7 @@
 
     /**
      * Save array of users to mongo
-     * @param {array.<StatGoose>} users
+     * @param {array.<Progress>} users
      * @param {function} callback
      */
     var saveUsers = function(users, callback) {
@@ -71,7 +71,7 @@
     /**
      * Copy data from users to players
      * @param {array.<Player>} players - data coming from a finished game
-     * @param {array.<StatGoose>} users - data from mongo
+     * @param {array.<Progress>} users - data from mongo
      */
     var mergeData = function(players, users) {
         var lookup = {};

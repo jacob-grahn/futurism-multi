@@ -42,13 +42,11 @@ var self = {
             }
             else {
                 player.idleTurns = 0;
+                player.actionsPerformed = 0;
             }
 
-            // reset performed actions to 0
-            player.actionsPerformed = 0;
-
             // forfeit if idleTurns is too high, and the player does not have any cards on the board
-            if(player.idleTurns >= 2) {
+            if(player.idleTurns >= 3) {
                 var targets = game.board.playerTargets(player._id);
                 var cardsOnBoard = _.filter(targets, 'card');
                 if(cardsOnBoard.length === 0) {
